@@ -6,344 +6,212 @@
 <title>RobloxBoard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet"/>
+
 <style>
-/* ===================== RESET ===================== */
+/* ============================================================
+   base.css — Reset · Variables · Badge · Avatar
+   ============================================================ */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:14px}
+html{font-size:14px;-webkit-text-size-adjust:100%}
 body{font-family:'Nunito','Malgun Gothic',sans-serif;background:#f2f2f2;color:#1a1a1a;min-height:100vh;overflow-x:hidden}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
-input,select,textarea{font-family:'Nunito','Malgun Gothic',sans-serif;font-size:13px}
+input,select,textarea{font-family:'Nunito','Malgun Gothic',sans-serif}
 ul{list-style:none}
 a{text-decoration:none;color:inherit}
 .hidden{display:none!important}
-
-/* ===================== VARIABLES ===================== */
 :root{
-  --blue:#0066ff;--blue-light:#e8f0ff;--blue-dark:#0044cc;
-  --red:#e53e3e;--green:#17a363;
-  --bg:#f2f2f2;--white:#fff;--light:#f7f7f7;--hover:#ebebeb;
+  --blue:#0066ff;--blue-lt:#e8f0ff;--blue-dk:#0044cc;--red:#e53e3e;
+  --white:#fff;--bg:#f2f2f2;--surface:#f7f7f7;--hover:#ebebeb;
   --border:#d4d4d4;--border-md:#c0c0c0;
   --text:#1a1a1a;--text2:#555;--text3:#999;
-  --sidebar-w:220px;--nav-h:48px;
+  --nav-h:48px;--sidebar-w:220px;
   --r-sm:4px;--r-md:6px;--r-lg:10px;
   --sh-sm:0 1px 3px rgba(0,0,0,.08);
   --sh-md:0 2px 8px rgba(0,0,0,.12);
-  --sh-lg:0 4px 20px rgba(0,0,0,.15)
+  --sh-lg:0 4px 20px rgba(0,0,0,.16)
 }
+.av-0{background:#0066ff}.av-1{background:#e53e3e}.av-2{background:#17a363}
+.av-3{background:#e06b1a}.av-4{background:#7c3aed}.av-5{background:#0891b2}
+.av-6{background:#be185d}.av-7{background:#a16207}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:800;padding:1px 6px;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.badge-admin{background:#ffe0e0;color:#c0392b}
+.badge-mod{background:#f0e6ff;color:#6b21a8}
+.badge-pro{background:var(--blue-lt);color:var(--blue-dk)}
+.badge-active{background:#fff3cd;color:#856404}
+.badge-new{background:#e0f5e9;color:#1a7a45}
+.avatar{border-radius:50%;background:var(--blue);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.optional{font-weight:400;color:var(--text3)}
 
-/* ===================== NAVBAR ===================== */
-.navbar{
-  position:fixed;top:0;left:0;right:0;height:var(--nav-h);
-  background:#fff;border-bottom:2px solid var(--blue);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;z-index:100;gap:12px
-}
-.navbar-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
-.navbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-
-.logo{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.logo-icon{
-  display:inline-block;width:26px;height:26px;
-  background:var(--blue);border-radius:var(--r-sm);position:relative
-}
-.logo-icon::before{
-  content:'';position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);width:14px;height:14px;
-  background:#fff;border-radius:2px;
-  clip-path:polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%)
-}
+/* ============================================================
+   layout.css — Navbar · Sidebar · Feed · Mobile
+   ============================================================ */
+.navbar{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--white);border-bottom:2px solid var(--blue);display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:200;gap:10px}
+.navbar-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.navbar-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.logo-icon{display:inline-block;width:26px;height:26px;background:var(--blue);border-radius:var(--r-sm);position:relative}
+.logo-icon::before{content:'';position:absolute;inset:0;margin:auto;width:13px;height:13px;background:#fff;border-radius:2px;clip-path:polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%)}
 .logo-icon.sm{width:22px;height:22px}
 .logo-text{font-size:15px;font-weight:800;color:var(--blue);letter-spacing:-.3px;white-space:nowrap}
-
-.search-bar{
-  display:flex;align-items:center;background:var(--light);
-  border:1px solid var(--border);border-radius:var(--r-md);
-  padding:0 10px;gap:7px;height:30px;max-width:320px;flex:1;
-  transition:border-color .15s,box-shadow .15s
-}
-.search-bar:focus-within{border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,102,255,.12);background:#fff}
-.search-icon{color:var(--text3);display:flex}
+.hamburger{display:none;flex-direction:column;gap:4px;padding:4px;flex-shrink:0}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text);border-radius:2px;transition:all .2s}
+.search-bar{display:flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:0 10px;gap:6px;height:30px;flex:1;max-width:300px;transition:border-color .15s,box-shadow .15s}
+.search-bar:focus-within{border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,102,255,.12);background:var(--white)}
+.search-icon{color:var(--text3);display:flex;flex-shrink:0}
 .search-bar input{border:none;background:transparent;outline:none;width:100%;font-size:12.5px;color:var(--text)}
 .search-bar input::placeholder{color:var(--text3)}
-
-.nav-btn{
-  height:28px;padding:0 10px;border-radius:var(--r-md);
-  font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;
-  transition:background .12s;white-space:nowrap
-}
-.sort-btn{background:var(--light);border:1px solid var(--border);color:var(--text2)}
+.nav-btn{height:28px;padding:0 10px;border-radius:var(--r-md);font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;transition:background .12s;white-space:nowrap}
+.sort-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2)}
 .sort-btn:hover{background:var(--hover)}
-.lang-btn{background:var(--light);border:1px solid var(--border);color:var(--text2);font-weight:700}
-.lang-btn:hover{background:var(--hover)}
-.login-btn{background:var(--light);border:1px solid var(--border);color:var(--text)}
+.login-btn{background:var(--surface);border:1px solid var(--border);color:var(--text)}
 .login-btn:hover{background:var(--hover)}
 .write-btn{background:var(--blue);color:#fff;font-weight:700}
-.write-btn:hover{background:var(--blue-dark)}
-
-/* ===================== LAYOUT ===================== */
+.write-btn:hover{background:var(--blue-dk)}
 .layout{display:flex;margin-top:var(--nav-h);min-height:calc(100vh - var(--nav-h))}
-
-/* ===================== SIDEBAR ===================== */
-.sidebar{
-  width:var(--sidebar-w);flex-shrink:0;background:#fff;
-  border-right:1px solid var(--border);
-  position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto
-}
+.sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--white);border-right:1px solid var(--border);position:sticky;top:var(--nav-h);height:calc(100vh - var(--nav-h));overflow-y:auto;transition:transform .25s ease}
 .sidebar::-webkit-scrollbar{width:4px}
 .sidebar::-webkit-scrollbar-thumb{background:#ddd;border-radius:4px}
-.sidebar-inner{padding:8px 0 24px}
-.sidebar-category{margin-bottom:4px}
-.category-header{
-  padding:8px 14px 4px;font-size:10.5px;font-weight:800;color:var(--text3);
-  letter-spacing:.06em;text-transform:uppercase;
-  display:flex;align-items:center;gap:5px;user-select:none
-}
+.sidebar-inner{padding:8px 0 32px}
+.sidebar-category{margin-bottom:2px}
+.category-header{padding:10px 14px 4px;font-size:10.5px;font-weight:800;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:5px;user-select:none}
 .category-header.pinned{color:var(--blue)}
-.section-list{padding:0 6px}
-.section-item{
-  display:flex;align-items:center;gap:6px;padding:5px 10px;
-  border-radius:var(--r-md);font-size:13px;font-weight:600;
-  color:var(--text2);cursor:pointer;transition:background .1s,color .1s;
-  position:relative;user-select:none
-}
+.section-list{padding:0 6px 4px}
+.section-item{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:var(--r-md);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:background .1s,color .1s;user-select:none;position:relative}
 .section-item:hover{background:var(--hover);color:var(--text)}
-.section-item.active{background:var(--blue-light);color:var(--blue)}
-.section-icon{font-size:13px;font-weight:700;opacity:.5;font-family:'Source Code Pro',monospace}
+.section-item.active{background:var(--blue-lt);color:var(--blue)}
+.section-icon{font-family:'Source Code Pro',monospace;font-size:13px;font-weight:700;opacity:.45;flex-shrink:0}
 .section-item.active .section-icon{opacity:1}
-.section-pin{
-  margin-left:auto;font-size:9px;font-weight:800;
-  background:var(--blue);color:#fff;padding:1px 5px;border-radius:3px;letter-spacing:.04em
-}
-
-/* ===================== MAIN FEED ===================== */
+.section-pin{margin-left:auto;font-size:9px;font-weight:800;background:var(--blue);color:#fff;padding:1px 5px;border-radius:3px;letter-spacing:.04em}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:150}
 .main-feed{flex:1;min-width:0;padding:24px 28px;max-width:860px}
 .feed-header{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
 .feed-title{font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:baseline;gap:4px}
 .feed-hash{font-family:'Source Code Pro',monospace;font-size:16px;color:var(--blue)}
 .feed-desc{font-size:12.5px;color:var(--text3);margin-top:4px}
-
-/* ===================== POST CARDS ===================== */
-.pinned-posts{margin-bottom:18px}
-.post-card{
-  background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);
-  margin-bottom:10px;overflow:hidden;cursor:pointer;
-  transition:box-shadow .15s,border-color .15s
+.load-more-wrap{text-align:center;margin-top:24px;padding-bottom:32px}
+.load-more-btn{padding:8px 32px;border:1.5px solid var(--border-md);border-radius:var(--r-md);font-size:13px;font-weight:700;color:var(--text2);background:var(--white);transition:all .12s}
+.load-more-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
+@media(max-width:768px){
+  .hamburger{display:flex}
+  .logo-text{font-size:14px}
+  .search-bar{max-width:none}
+  .sort-btn{display:none}
+  .write-label{display:none}
+  .write-btn{padding:0 8px}
+  .sidebar{position:fixed;top:var(--nav-h);left:0;height:calc(100vh - var(--nav-h));z-index:160;transform:translateX(-100%);box-shadow:var(--sh-lg)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .main-feed{padding:16px 14px}
+  .feed-title{font-size:16px}
 }
+@media(max-width:480px){
+  :root{--nav-h:44px}
+  .logo-icon{width:22px;height:22px}
+  .logo-text{font-size:13px}
+  .nav-btn{height:26px;font-size:11px;padding:0 8px}
+  .main-feed{padding:12px 10px}
+}
+
+/* ============================================================
+   components.css — Cards · Modals · Forms · Editor · Comments
+   ============================================================ */
+.post-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);margin-bottom:10px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,border-color .15s}
 .post-card:hover{border-color:var(--blue);box-shadow:var(--sh-md)}
 .pinned-card{border-color:#c0d4ff;background:#f5f8ff}
-.pin-label{
-  background:var(--blue);color:#fff;font-size:10.5px;font-weight:700;
-  padding:4px 12px;display:flex;align-items:center;gap:5px;letter-spacing:.04em
-}
+.pin-label{background:var(--blue);color:#fff;font-size:10.5px;font-weight:700;padding:4px 12px;display:flex;align-items:center;gap:5px;letter-spacing:.04em}
 .post-card-inner{padding:14px 16px}
-.post-meta-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.post-author{display:flex;align-items:center;gap:7px}
-.avatar{
-  width:26px;height:26px;border-radius:50%;background:var(--blue);
-  color:#fff;font-size:11px;font-weight:800;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0
-}
+.post-meta-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
+.post-author{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .author-name{font-size:12.5px;font-weight:700;color:var(--text)}
-.post-date{font-size:11.5px;color:var(--text3);font-family:'Source Code Pro',monospace}
-.badge{
-  display:inline-flex;align-items:center;font-size:10px;font-weight:800;
-  padding:1px 6px;border-radius:3px;letter-spacing:.04em;text-transform:uppercase
-}
-.badge-admin{background:#ffe0e0;color:#c0392b}
-.badge-new{background:#e0f5e9;color:#1a7a45}
-.badge-active{background:#fff3cd;color:#856404}
-.badge-pro{background:var(--blue-light);color:var(--blue-dark)}
-.badge-mod{background:#f0e6ff;color:#6b21a8}
+.post-date{font-size:11.5px;color:var(--text3);font-family:'Source Code Pro',monospace;white-space:nowrap}
 .post-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:5px;line-height:1.4}
-.post-preview{
-  font-size:12.5px;color:var(--text2);line-height:1.6;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
-}
-.post-game-thumb{width:48px;height:48px;border-radius:var(--r-md);background:var(--light);border:1px solid var(--border);object-fit:cover;flex-shrink:0}
+.post-preview{font-size:12.5px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .post-with-thumb{display:flex;align-items:flex-start;gap:12px}
 .post-thumb-info{flex:1;min-width:0}
-.post-footer{
-  display:flex;align-items:center;gap:14px;margin-top:10px;
-  padding-top:10px;border-top:1px solid #f0f0f0
-}
+.post-game-thumb{width:56px;height:56px;border-radius:var(--r-md);border:1px solid var(--border);object-fit:cover;flex-shrink:0}
+.post-footer{display:flex;align-items:center;gap:12px;margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0;flex-wrap:wrap}
 .post-stat{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text3);font-weight:600}
 .post-stat svg{opacity:.6}
 .section-tag{margin-left:auto;font-size:11px;color:var(--text3);font-family:'Source Code Pro',monospace}
-
-/* ===================== LOAD MORE ===================== */
-.load-more-wrap{text-align:center;margin-top:24px}
-.load-more-btn{
-  padding:8px 32px;border:1.5px solid var(--border-md);border-radius:var(--r-md);
-  font-size:13px;font-weight:700;color:var(--text2);background:#fff;transition:all .12s
+@media(max-width:480px){
+  .post-card-inner{padding:11px 12px}
+  .post-title{font-size:13.5px}
+  .post-game-thumb{width:44px;height:44px}
+  .section-tag{display:none}
 }
-.load-more-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
-
-/* ===================== MODAL BASE ===================== */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  opacity:0;pointer-events:none;transition:opacity .18s
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .18s}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{
-  background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh-lg);
-  width:100%;max-width:420px;padding:28px 28px 24px;position:relative;
-  max-height:90vh;overflow-y:auto;
-  transform:translateY(12px);transition:transform .18s
-}
+.modal{background:var(--white);border-radius:var(--r-lg);box-shadow:var(--sh-lg);width:100%;max-width:420px;padding:26px 24px 22px;position:relative;max-height:92vh;overflow-y:auto;transform:translateY(10px);transition:transform .18s}
 .modal-overlay.open .modal{transform:translateY(0)}
-.modal-write{max-width:640px}
-.modal-post{max-width:720px}
-.modal-close{
-  position:absolute;top:14px;right:14px;width:28px;height:28px;
-  border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
-  color:var(--text3);transition:background .12s,color .12s
-}
+.modal-write{max-width:620px}
+.modal-post{max-width:700px}
+.modal-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--text3);transition:background .12s,color .12s}
 .modal-close:hover{background:var(--hover);color:var(--text)}
-.modal-logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:var(--blue);margin-bottom:20px}
-.modal-title{font-size:16px;font-weight:800;margin-bottom:18px;color:var(--text)}
-.modal-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px}
-.modal-tab{
-  padding:6px 16px;font-size:13px;font-weight:700;color:var(--text3);
-  border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .12s,border-color .12s
-}
+.modal-logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:var(--blue);margin-bottom:18px}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:16px;color:var(--text)}
+.modal-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:18px}
+.modal-tab{padding:6px 16px;font-size:13px;font-weight:700;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .12s,border-color .12s}
 .modal-tab.active{color:var(--blue);border-color:var(--blue)}
 .modal-tab:hover:not(.active){color:var(--text)}
-
-/* ===================== FORMS ===================== */
-.form-group{margin-bottom:14px}
+@media(max-width:480px){
+  .modal{padding:20px 16px 18px;border-radius:var(--r-md)}
+  .modal-write,.modal-post{max-width:100%}
+}
+.form-group{margin-bottom:13px}
 .form-group label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:5px;letter-spacing:.03em}
-.optional{font-weight:400;color:var(--text3)}
-.form-group input,.form-group select{
-  width:100%;height:34px;padding:0 10px;border:1.5px solid var(--border);
-  border-radius:var(--r-md);background:var(--light);color:var(--text);
-  font-size:13px;outline:none;transition:border-color .12s,box-shadow .12s,background .12s
-}
-.form-group input:focus,.form-group select:focus{
-  border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,102,255,.12);background:#fff
-}
-.form-submit{
-  width:100%;height:38px;background:var(--blue);color:#fff;border-radius:var(--r-md);
-  font-size:13.5px;font-weight:800;margin-top:4px;transition:background .12s
-}
-.form-submit:hover{background:var(--blue-dark)}
-.write-section-select{margin-bottom:14px}
-.write-section-select label{display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:5px}
-
-/* ===================== GAME ID ===================== */
+.form-group input,.form-group select{width:100%;height:34px;padding:0 10px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);color:var(--text);font-size:13px;outline:none;transition:border-color .12s,box-shadow .12s,background .12s}
+.form-group input:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(0,102,255,.12);background:var(--white)}
+.form-submit{width:100%;height:38px;background:var(--blue);color:#fff;border-radius:var(--r-md);font-size:13.5px;font-weight:800;margin-top:4px;transition:background .12s}
+.form-submit:hover{background:var(--blue-dk)}
 .game-id-row{display:flex;gap:8px}
-.game-id-row input{flex:1}
-.fetch-btn{
-  height:34px;padding:0 14px;background:var(--light);border:1.5px solid var(--border);
-  border-radius:var(--r-md);font-size:12.5px;font-weight:700;color:var(--blue);
-  white-space:nowrap;transition:all .12s
-}
-.fetch-btn:hover{background:var(--blue-light);border-color:var(--blue)}
-.game-preview{
-  margin-top:10px;display:flex;align-items:center;gap:10px;
-  padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:var(--r-md)
-}
-.game-thumb-placeholder{width:56px;height:56px;border-radius:var(--r-md);background:var(--border);overflow:hidden;flex-shrink:0}
-.game-thumb-placeholder img{width:100%;height:100%;object-fit:cover}
+.game-id-row input{flex:1;min-width:0}
+.fetch-btn{height:34px;padding:0 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);font-size:12px;font-weight:700;color:var(--blue);white-space:nowrap;transition:all .12s}
+.fetch-btn:hover{background:var(--blue-lt);border-color:var(--blue)}
+.game-preview{margin-top:8px;display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md)}
+.game-thumb-box{width:52px;height:52px;border-radius:var(--r-md);background:var(--border);overflow:hidden;flex-shrink:0}
+.game-thumb-box img{width:100%;height:100%;object-fit:cover}
 .game-info-preview{display:flex;flex-direction:column;gap:3px}
 .game-name-preview{font-size:13px;font-weight:700}
 .game-id-preview{font-size:11px;color:var(--text3);font-family:'Source Code Pro',monospace}
-
-/* ===================== EDITOR ===================== */
-.editor-toolbar{
-  display:flex;align-items:center;gap:2px;padding:4px 8px;
-  background:var(--light);border:1.5px solid var(--border);
-  border-bottom:none;border-radius:var(--r-md) var(--r-md) 0 0
-}
-.toolbar-btn{
-  width:28px;height:26px;display:flex;align-items:center;justify-content:center;
-  border-radius:var(--r-sm);font-size:12px;font-weight:700;color:var(--text2);
-  transition:background .1s,color .1s
-}
+.editor-toolbar{display:flex;align-items:center;gap:2px;padding:4px 8px;background:var(--surface);border:1.5px solid var(--border);border-bottom:none;border-radius:var(--r-md) var(--r-md) 0 0}
+.toolbar-btn{width:28px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-sm);font-size:12px;font-weight:700;color:var(--text2);transition:background .1s,color .1s}
 .toolbar-btn:hover{background:var(--hover);color:var(--text)}
-.img-upload-btn{display:flex;align-items:center;gap:4px;cursor:pointer;padding:0 8px;width:auto;font-size:11.5px;font-weight:700}
+.img-upload-btn{cursor:pointer;padding:0 8px;width:auto;font-size:11.5px;font-weight:700;gap:4px}
 .toolbar-divider{width:1px;height:16px;background:var(--border);margin:0 4px}
 .img-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--text3);font-family:'Source Code Pro',monospace}
-.editor-textarea{
-  width:100%;border:1.5px solid var(--border);
-  border-radius:0 0 var(--r-md) var(--r-md);padding:10px 12px;
-  font-size:13px;font-family:'Source Code Pro',monospace;color:var(--text);
-  background:#fff;resize:vertical;outline:none;line-height:1.7;min-height:180px;
-  transition:border-color .12s
-}
+.editor-textarea{width:100%;border:1.5px solid var(--border);border-radius:0 0 var(--r-md) var(--r-md);padding:10px 12px;font-size:13px;font-family:'Source Code Pro',monospace;color:var(--text);background:var(--white);resize:vertical;outline:none;line-height:1.7;min-height:160px;transition:border-color .12s}
 .editor-textarea:focus{border-color:var(--blue)}
 .img-preview-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.img-preview-item{position:relative;width:72px;height:72px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border)}
+.img-preview-item{position:relative;width:68px;height:68px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border)}
 .img-preview-item img{width:100%;height:100%;object-fit:cover}
-.img-preview-item .remove-img{
-  position:absolute;top:3px;right:3px;width:18px;height:18px;
-  background:rgba(0,0,0,.55);color:#fff;border-radius:50%;
-  font-size:10px;display:flex;align-items:center;justify-content:center
-}
-.write-actions{display:flex;gap:8px;margin-top:18px}
-.cancel-btn{
-  height:38px;padding:0 18px;border:1.5px solid var(--border);border-radius:var(--r-md);
-  font-size:13px;font-weight:700;color:var(--text2);background:var(--light);transition:all .12s
-}
+.remove-img{position:absolute;top:3px;right:3px;width:18px;height:18px;background:rgba(0,0,0,.55);color:#fff;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.write-actions{display:flex;gap:8px;margin-top:16px}
+.cancel-btn{height:38px;padding:0 16px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:13px;font-weight:700;color:var(--text2);background:var(--surface);transition:all .12s}
 .cancel-btn:hover{border-color:var(--border-md);background:var(--hover)}
-.write-actions .form-submit{flex:1;margin-top:0}
-
-/* ===================== POST DETAIL ===================== */
-.post-detail-title{font-size:20px;font-weight:800;line-height:1.35;margin-bottom:10px}
-.post-detail-meta{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--text3);flex-wrap:wrap}
-.post-detail-body{
-  font-size:13.5px;line-height:1.8;color:var(--text);
-  border-top:1px solid var(--border);padding-top:16px;margin:16px 0 20px;
-  white-space:pre-wrap;word-break:break-word
-}
-.post-actions-row{
-  display:flex;align-items:center;gap:10px;padding:12px 0;
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:20px
-}
-.like-btn{
-  display:flex;align-items:center;gap:5px;padding:6px 14px;
-  border:1.5px solid var(--border);border-radius:var(--r-md);
-  font-size:12.5px;font-weight:700;color:var(--text2);background:var(--light);transition:all .12s
-}
-.like-btn:hover,.like-btn.liked{border-color:#e53e3e;color:#e53e3e;background:#fff5f5}
-.report-btn{
-  margin-left:auto;font-size:11.5px;color:var(--text3);
-  padding:5px 10px;border:1px solid transparent;border-radius:var(--r-sm);transition:all .12s
-}
+.write-actions .submit-post{flex:1;margin-top:0}
+.post-detail-title{font-size:19px;font-weight:800;line-height:1.35;margin-bottom:10px}
+.post-detail-meta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text3);flex-wrap:wrap}
+.post-detail-body{font-size:13.5px;line-height:1.8;color:var(--text);border-top:1px solid var(--border);padding-top:16px;margin:14px 0 18px;white-space:pre-wrap;word-break:break-word}
+.post-actions-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:18px}
+.like-btn{display:flex;align-items:center;gap:5px;padding:6px 14px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:12.5px;font-weight:700;color:var(--text2);background:var(--surface);transition:all .12s}
+.like-btn:hover,.like-btn.liked{border-color:var(--red);color:var(--red);background:#fff5f5}
+.report-btn{margin-left:auto;font-size:11.5px;color:var(--text3);padding:5px 10px;border:1px solid transparent;border-radius:var(--r-sm);transition:all .12s}
 .report-btn:hover{color:var(--red);border-color:var(--red);background:#fff5f5}
-.comments-section-title{font-size:13px;font-weight:800;color:var(--text2);margin-bottom:12px}
+.comments-title{font-size:13px;font-weight:800;color:var(--text2);margin-bottom:12px}
 .comment-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #f3f3f3}
 .comment-item:last-child{border-bottom:none}
-.comment-body{flex:1}
-.comment-author{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px}
-.comment-text{font-size:13px;color:var(--text2);line-height:1.6}
+.comment-body{flex:1;min-width:0}
+.comment-author{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .comment-date{font-size:11px;color:var(--text3);font-family:'Source Code Pro',monospace}
-.comment-input-row{display:flex;gap:8px;margin-top:14px}
-.comment-input-row input{
-  flex:1;height:36px;padding:0 12px;border:1.5px solid var(--border);
-  border-radius:var(--r-md);background:var(--light);font-size:13px;
-  color:var(--text);outline:none;transition:border-color .12s
-}
-.comment-input-row input:focus{border-color:var(--blue);background:#fff}
-.comment-submit{
-  height:36px;padding:0 16px;background:var(--blue);color:#fff;
-  border-radius:var(--r-md);font-size:12.5px;font-weight:700;
-  white-space:nowrap;transition:background .12s
-}
-.comment-submit:hover{background:var(--blue-dark)}
-
-/* ===================== AVATAR COLORS ===================== */
-.av-0{background:#0066ff}.av-1{background:#e53e3e}.av-2{background:#17a363}
-.av-3{background:#e06b1a}.av-4{background:#7c3aed}.av-5{background:#0891b2}
-.av-6{background:#be185d}.av-7{background:#a16207}
-
-/* ===================== RESPONSIVE ===================== */
-@media(max-width:768px){
-  .sidebar{display:none}
-  .main-feed{padding:16px}
-  .modal-write{max-width:100%}
-  .navbar-left .search-bar{max-width:160px}
-  .logo-text{display:none}
+.comment-text{font-size:13px;color:var(--text2);line-height:1.6;word-break:break-word}
+.comment-input-row{display:flex;gap:8px;margin-top:12px}
+.comment-input-row input{flex:1;min-width:0;height:36px;padding:0 12px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);font-size:13px;color:var(--text);outline:none;transition:border-color .12s}
+.comment-input-row input:focus{border-color:var(--blue);background:var(--white)}
+.comment-submit{height:36px;padding:0 14px;background:var(--blue);color:#fff;border-radius:var(--r-md);font-size:12.5px;font-weight:700;white-space:nowrap;transition:background .12s}
+.comment-submit:hover{background:var(--blue-dk)}
+@media(max-width:480px){
+  .post-detail-title{font-size:16px}
+  .post-detail-body{font-size:13px}
 }
 </style>
 </head>
@@ -352,14 +220,16 @@ a{text-decoration:none;color:inherit}
 <!-- ========== NAVBAR ========== -->
 <header class="navbar">
   <div class="navbar-left">
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
     <div class="logo">
       <span class="logo-icon"></span>
       <span class="logo-text">RobloxBoard</span>
     </div>
     <div class="search-bar">
-      <span class="search-icon">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </span>
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
       <input type="text" placeholder="게임, 게시물 검색..." id="searchInput"/>
     </div>
   </div>
@@ -368,108 +238,97 @@ a{text-decoration:none;color:inherit}
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M2 4h12M4 8h8M6 12h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span id="sortLabel">최신순</span>
     </button>
-    <button class="nav-btn lang-btn" id="langBtn">KO</button>
     <button class="nav-btn login-btn" id="loginBtn">로그인</button>
     <button class="nav-btn write-btn" id="writeBtn">
       <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      글쓰기
+      <span class="write-label">글쓰기</span>
     </button>
   </div>
 </header>
 
 <!-- ========== LAYOUT ========== -->
 <div class="layout">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-inner">
-
       <div class="sidebar-category">
         <div class="category-header pinned">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/></svg>
           공지
         </div>
         <ul class="section-list">
-          <li class="section-item active" data-section="notice"><span class="section-icon">#</span> 공지사항<span class="section-pin">PIN</span></li>
-          <li class="section-item" data-section="update"><span class="section-icon">#</span> 업데이트</li>
+          <li class="section-item active" data-section="notice"><span class="section-icon">#</span>공지사항<span class="section-pin">PIN</span></li>
+          <li class="section-item" data-section="update"><span class="section-icon">#</span>업데이트</li>
         </ul>
       </div>
-
       <div class="sidebar-category">
         <div class="category-header">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M6 1H1v5l9.5 9.5a1 1 0 0 0 1.5 0l3-3a1 1 0 0 0 0-1.5L6 1zm-1.5 3a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
           게임 공유
         </div>
         <ul class="section-list">
-          <li class="section-item" data-section="showcase"><span class="section-icon">#</span> 게임 소개</li>
-          <li class="section-item" data-section="review"><span class="section-icon">#</span> 리뷰 / 평가</li>
-          <li class="section-item" data-section="recommend"><span class="section-icon">#</span> 추천 요청</li>
+          <li class="section-item" data-section="showcase"><span class="section-icon">#</span>게임 소개</li>
+          <li class="section-item" data-section="review"><span class="section-icon">#</span>리뷰 / 평가</li>
+          <li class="section-item" data-section="recommend"><span class="section-icon">#</span>추천 요청</li>
         </ul>
       </div>
-
       <div class="sidebar-category">
         <div class="category-header">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-4 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
           커뮤니티
         </div>
         <ul class="section-list">
-          <li class="section-item" data-section="general"><span class="section-icon">#</span> 자유 게시판</li>
-          <li class="section-item" data-section="qna"><span class="section-icon">#</span> 질문 / 답변</li>
-          <li class="section-item" data-section="tip"><span class="section-icon">#</span> 팁 &amp; 공략</li>
+          <li class="section-item" data-section="general"><span class="section-icon">#</span>자유 게시판</li>
+          <li class="section-item" data-section="qna"><span class="section-icon">#</span>질문 / 답변</li>
+          <li class="section-item" data-section="tip"><span class="section-icon">#</span>팁 &amp; 공략</li>
         </ul>
       </div>
-
       <div class="sidebar-category">
         <div class="category-header">
           <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/></svg>
           개발자
         </div>
         <ul class="section-list">
-          <li class="section-item" data-section="devlog"><span class="section-icon">#</span> 개발 일지</li>
-          <li class="section-item" data-section="recruit"><span class="section-icon">#</span> 팀원 모집</li>
-          <li class="section-item" data-section="asset"><span class="section-icon">#</span> 에셋 공유</li>
+          <li class="section-item" data-section="devlog"><span class="section-icon">#</span>개발 일지</li>
+          <li class="section-item" data-section="recruit"><span class="section-icon">#</span>팀원 모집</li>
+          <li class="section-item" data-section="asset"><span class="section-icon">#</span>에셋 공유</li>
         </ul>
       </div>
-
     </div>
   </aside>
 
-  <!-- MAIN FEED -->
   <main class="main-feed">
     <div class="feed-header">
-      <h2 class="feed-title" id="feedTitle"><span class="feed-hash">#</span> 공지사항</h2>
+      <h2 class="feed-title" id="feedTitle"><span class="feed-hash">#</span>공지사항</h2>
       <p class="feed-desc" id="feedDesc">관리자가 작성하는 중요 공지를 확인하세요.</p>
     </div>
-    <div class="pinned-posts" id="pinnedPosts"></div>
-    <div class="posts-list" id="postsList"></div>
+    <div id="pinnedPosts"></div>
+    <div id="postsList"></div>
     <div class="load-more-wrap">
       <button class="load-more-btn" id="loadMoreBtn">더 보기</button>
     </div>
   </main>
-
 </div>
 
 <!-- ========== MODAL: 로그인 ========== -->
 <div class="modal-overlay" id="loginModal">
   <div class="modal">
-    <button class="modal-close" id="closeLoginModal">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
+    <button class="modal-close" id="closeLoginModal"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     <div class="modal-logo"><span class="logo-icon sm"></span><span>RobloxBoard</span></div>
     <div class="modal-tabs">
       <button class="modal-tab active" data-tab="login">로그인</button>
       <button class="modal-tab" data-tab="register">회원가입</button>
     </div>
     <div class="modal-form" id="formLogin">
-      <div class="form-group"><label>이메일</label><input type="email" placeholder="example@email.com" id="loginEmail"/></div>
-      <div class="form-group"><label>비밀번호</label><input type="password" placeholder="비밀번호 입력" id="loginPw"/></div>
+      <div class="form-group"><label>닉네임</label><input type="text" id="loginNick" placeholder="닉네임 입력"/></div>
+      <div class="form-group"><label>비밀번호</label><input type="password" id="loginPw" placeholder="비밀번호 입력"/></div>
       <button class="form-submit" id="doLogin">로그인</button>
     </div>
     <div class="modal-form hidden" id="formRegister">
-      <div class="form-group"><label>닉네임</label><input type="text" placeholder="닉네임 입력" id="regNick"/></div>
-      <div class="form-group"><label>이메일</label><input type="email" placeholder="example@email.com" id="regEmail"/></div>
-      <div class="form-group"><label>비밀번호</label><input type="password" placeholder="8자 이상" id="regPw"/></div>
-      <div class="form-group"><label>Roblox 유저명 <span class="optional">(선택)</span></label><input type="text" placeholder="Roblox 아이디" id="regRoblox"/></div>
+      <div class="form-group"><label>닉네임</label><input type="text" id="regNick" placeholder="닉네임 입력"/></div>
+      <div class="form-group"><label>비밀번호</label><input type="password" id="regPw" placeholder="8자 이상"/></div>
+      <div class="form-group"><label>Roblox 유저명 <span class="optional">(선택)</span></label><input type="text" id="regRoblox" placeholder="Roblox 아이디"/></div>
       <button class="form-submit" id="doRegister">가입하기</button>
     </div>
   </div>
@@ -478,11 +337,9 @@ a{text-decoration:none;color:inherit}
 <!-- ========== MODAL: 글쓰기 ========== -->
 <div class="modal-overlay" id="writeModal">
   <div class="modal modal-write">
-    <button class="modal-close" id="closeWriteModal">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
+    <button class="modal-close" id="closeWriteModal"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     <h2 class="modal-title">새 게시물</h2>
-    <div class="write-section-select">
+    <div class="form-group">
       <label>섹션 선택</label>
       <select id="writeSectionSelect">
         <option value="notice"># 공지사항</option>
@@ -496,15 +353,15 @@ a{text-decoration:none;color:inherit}
         <option value="asset"># 에셋 공유</option>
       </select>
     </div>
-    <div class="form-group"><label>제목</label><input type="text" placeholder="게시물 제목" id="writeTitle"/></div>
+    <div class="form-group"><label>제목</label><input type="text" id="writeTitle" placeholder="게시물 제목"/></div>
     <div class="form-group">
       <label>Roblox 게임 ID <span class="optional">(선택)</span></label>
       <div class="game-id-row">
-        <input type="text" placeholder="게임 ID 입력 (예: 292439477)" id="gameIdInput"/>
+        <input type="text" id="gameIdInput" placeholder="게임 ID 입력 (예: 292439477)"/>
         <button class="fetch-btn" id="fetchGameBtn">불러오기</button>
       </div>
       <div class="game-preview hidden" id="gamePreview">
-        <div class="game-thumb-placeholder" id="gameThumb"></div>
+        <div class="game-thumb-box" id="gameThumb"></div>
         <div class="game-info-preview">
           <span class="game-name-preview" id="gameNamePreview">게임 이름</span>
           <span class="game-id-preview" id="gameIdPreview">ID: —</span>
@@ -517,25 +374,21 @@ a{text-decoration:none;color:inherit}
         <button class="toolbar-btn" title="굵게" onclick="insertMd('**','**')"><b>B</b></button>
         <button class="toolbar-btn" title="기울임" onclick="insertMd('*','*')"><i>I</i></button>
         <button class="toolbar-btn" title="코드" onclick="insertMd('\`','\`')">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/></svg>
-        </button>
-        <button class="toolbar-btn" title="링크" onclick="insertMd('[','](url)')">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 9.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/><path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/></svg>
         </button>
         <div class="toolbar-divider"></div>
-        <label class="toolbar-btn img-upload-btn" title="이미지 최대 5장">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
-          이미지
-          <input type="file" accept="image/*" multiple style="display:none" id="imageInput"/>
+        <label class="toolbar-btn img-upload-btn">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>
+          이미지<input type="file" accept="image/*" multiple style="display:none" id="imageInput"/>
         </label>
         <span class="img-count" id="imgCount">0/5</span>
       </div>
-      <textarea class="editor-textarea" id="editorTextarea" placeholder="내용을 입력하세요. 마크다운을 지원합니다." rows="10"></textarea>
+      <textarea class="editor-textarea" id="editorTextarea" placeholder="내용을 입력하세요." rows="8"></textarea>
       <div class="img-preview-row" id="imgPreviewRow"></div>
     </div>
     <div class="write-actions">
       <button class="cancel-btn" id="cancelWrite">취소</button>
-      <button class="form-submit" id="submitPost">게시하기</button>
+      <button class="form-submit submit-post" id="submitPost">게시하기</button>
     </div>
   </div>
 </div>
@@ -543,464 +396,323 @@ a{text-decoration:none;color:inherit}
 <!-- ========== MODAL: 게시물 상세 ========== -->
 <div class="modal-overlay" id="postModal">
   <div class="modal modal-post">
-    <button class="modal-close" id="closePostModal">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
+    <button class="modal-close" id="closePostModal"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     <div id="postModalContent"></div>
   </div>
 </div>
 
+<!-- ============================================================
+     data.js — 섹션 정보 · 샘플 게시물 · 댓글 · 전역 상태
+     ============================================================ -->
 <script>
-/* ============================================================
-   DATA
-   ============================================================ */
 const SECTIONS = {
   notice:    { label:'공지사항',   desc:'관리자가 작성하는 중요 공지를 확인하세요.' },
   update:    { label:'업데이트',   desc:'서비스 업데이트 내역을 확인하세요.' },
   showcase:  { label:'게임 소개',  desc:'내가 만든 게임을 소개하고 피드백 받아보세요.' },
-  review:    { label:'리뷰 / 평가',desc:'게임에 대한 솔직한 리뷰를 남겨보세요.' },
-  recommend: { label:'추천 요청', desc:'하고 싶은 장르나 스타일을 말하면 추천해드려요.' },
+  review:    { label:'리뷰/평가',  desc:'게임에 대한 솔직한 리뷰를 남겨보세요.' },
+  recommend: { label:'추천 요청',  desc:'하고 싶은 장르나 스타일을 말하면 추천해드려요.' },
   general:   { label:'자유 게시판',desc:'로블록스와 관련된 무엇이든 자유롭게 이야기하세요.' },
-  qna:       { label:'질문 / 답변',desc:'궁금한 점을 질문하고 답변해보세요.' },
+  qna:       { label:'질문/답변',  desc:'궁금한 점을 질문하고 답변해보세요.' },
   tip:       { label:'팁 & 공략', desc:'유용한 팁과 공략을 공유해보세요.' },
   devlog:    { label:'개발 일지',  desc:'게임 개발 과정을 기록하고 공유해보세요.' },
-  recruit:   { label:'팀원 모집', desc:'같이 게임 만들 팀원을 모집해보세요.' },
-  asset:     { label:'에셋 공유', desc:'무료 에셋을 공유하거나 찾아보세요.' },
+  recruit:   { label:'팀원 모집',  desc:'같이 게임 만들 팀원을 모집해보세요.' },
+  asset:     { label:'에셋 공유',  desc:'무료 에셋을 공유하거나 찾아보세요.' },
 };
-
 const BADGE_MAP = {
-  admin:  { label:'관리자', cls:'badge-admin' },
+  admin:  { label:'관리자',     cls:'badge-admin' },
   mod:    { label:'모더레이터', cls:'badge-mod' },
-  pro:    { label:'판린', cls:'badge-pro' },
-  active: { label:'활동자', cls:'badge-active' },
-  new:    { label:'신규', cls:'badge-new' },
+  pro:    { label:'판린',       cls:'badge-pro' },
+  active: { label:'활동자',     cls:'badge-active' },
+  new:    { label:'신규',       cls:'badge-new' },
 };
-
 let POSTS = [
-  { id:1, section:'notice', title:'RobloxBoard 서비스 오픈 안내',
-    content:'RobloxBoard가 정식 오픈했습니다. 로블록스 게임을 공유하고 커뮤니티와 소통해보세요.\n\n이 플랫폼에서는 게임 소개, 리뷰, 개발 일지, 팁 등 다양한 콘텐츠를 공유할 수 있습니다.',
-    author:{name:'Admin',role:'admin'}, likes:24, comments:2, date:'2025.04.28', pinned:true },
-  { id:2, section:'showcase', title:'제가 6개월 동안 만든 타워 디펜스 게임 소개합니다',
-    content:'안녕하세요! 혼자서 6개월간 만든 타워 디펜스 게임을 소개합니다.\n\n총 20개 스테이지, 15종 타워, 유니크한 보스몬스터가 있습니다. 많이 플레이해주세요!',
-    author:{name:'TowerKing',role:'active'}, likes:87, comments:3, date:'2025.04.27', pinned:false,
+  { id:1, section:'notice', pinned:true,
+    title:'RobloxBoard 서비스 오픈 안내',
+    content:'RobloxBoard가 정식 오픈했습니다.\n로블록스 게임을 공유하고 커뮤니티와 소통해보세요!\n\n게임 소개, 리뷰, 개발 일지, 팁 등 다양한 콘텐츠를 올릴 수 있습니다.',
+    author:{name:'Admin',role:'admin'}, likes:24, comments:2, date:'2025.04.28' },
+  { id:2, section:'showcase', pinned:false,
+    title:'6개월 동안 만든 타워 디펜스 게임 소개합니다',
+    content:'안녕하세요! 혼자서 6개월간 만든 타워 디펜스 게임을 소개합니다.\n\n- 스테이지 20개\n- 타워 15종\n- 유니크한 보스몬스터',
+    author:{name:'TowerKing',role:'active'}, likes:87, comments:3, date:'2025.04.27',
     gameId:'292439477', gameThumb:'https://tr.rbxcdn.com/53eb9b17fe1432a809c73a13889b5006/768/432/Image/Png', gameName:'Tower Defense Simulator' },
-  { id:3, section:'qna', title:'로블록스 스튜디오에서 파트 레이캐스트 사용법 알려주세요',
-    content:'레이캐스트를 이용해 총알 판정을 구현하려고 하는데, 예제 코드나 튜토리얼 링크 알고 계신 분 있나요?',
-    author:{name:'NewDev99',role:'new'}, likes:5, comments:12, date:'2025.04.27', pinned:false },
-  { id:4, section:'tip', title:'렉 없는 서버 스크립트 최적화 팁 모음 (실전)',
-    content:'1. 반복 루프 안에서 wait() 대신 task.wait() 사용하기\n2. RemoteEvent 남용 금지\n3. 인스턴스 생성은 최소화\n4. CollectionService로 태그 관리',
-    author:{name:'ScriptPro',role:'pro'}, likes:142, comments:31, date:'2025.04.26', pinned:false },
-  { id:5, section:'general', title:'요즘 로블록스 트렌드가 레이싱 게임인가요?',
+  { id:3, section:'qna', pinned:false,
+    title:'스튜디오에서 레이캐스트 사용법 알려주세요',
+    content:'레이캐스트로 총알 판정을 구현하려고 하는데, 예제 코드나 튜토리얼 링크 아시는 분 있나요?',
+    author:{name:'NewDev99',role:'new'}, likes:5, comments:12, date:'2025.04.27' },
+  { id:4, section:'tip', pinned:false,
+    title:'렉 없는 서버 스크립트 최적화 팁 모음',
+    content:'1. wait() 대신 task.wait() 사용\n2. RemoteEvent 남용 금지\n3. 인스턴스 생성 최소화\n4. CollectionService로 태그 관리',
+    author:{name:'ScriptPro',role:'pro'}, likes:142, comments:31, date:'2025.04.26' },
+  { id:5, section:'general', pinned:false,
+    title:'요즘 로블록스 트렌드가 레이싱 게임인가요?',
     content:'최근 인기 목록 보면 레이싱 게임이 많이 보이더라고요. 다들 어떤 장르 즐기시나요?',
-    author:{name:'RblxFan',role:'new'}, likes:18, comments:44, date:'2025.04.25', pinned:false },
-  { id:6, section:'devlog', title:'[개발일지 #7] 보스 AI 패턴 구현 완료!',
+    author:{name:'RblxFan',role:'new'}, likes:18, comments:44, date:'2025.04.25' },
+  { id:6, section:'devlog', pinned:false,
+    title:'[개발일지 #7] 보스 AI 패턴 구현 완료!',
     content:'드디어 보스 AI 3가지 패턴을 모두 구현했습니다.\n\n- 패턴 1: 레이저 회전 공격\n- 패턴 2: 범위 폭발\n- 패턴 3: 소환 몬스터',
-    author:{name:'DevLogger',role:'active'}, likes:63, comments:17, date:'2025.04.24', pinned:false },
-  { id:7, section:'recruit', title:'2인 팀 스크립터 구합니다 (모바일 RPG 개발 중)',
-    content:'현재 맵 디자이너 1명, 기획 1명이 있고 스크립터 1명을 추가로 모집합니다.\n\n요구 스펙: Lua 기초 이상, Discord 소통 가능, 주 10시간 이상 투자 가능',
-    author:{name:'RPGBuilder',role:'active'}, likes:9, comments:6, date:'2025.04.23', pinned:false },
+    author:{name:'DevLogger',role:'active'}, likes:63, comments:17, date:'2025.04.24' },
+  { id:7, section:'recruit', pinned:false,
+    title:'스크립터 구합니다 (모바일 RPG 개발 중)',
+    content:'맵 디자이너 1명, 기획 1명이 있고 스크립터 1명을 추가 모집합니다.\n\n요구 스펙: Lua 기초 이상, Discord 소통 가능, 주 10시간 이상 투자 가능',
+    author:{name:'RPGBuilder',role:'active'}, likes:9, comments:6, date:'2025.04.23' },
 ];
-
 let COMMENTS = {
   1:[
-    {author:'CoolPlayer',role:'new',text:'오픈 축하드립니다! 좋은 플랫폼이 될 것 같아요.',date:'2025.04.28'},
-    {author:'Admin',role:'admin',text:'감사합니다! 앞으로 더 좋은 서비스로 발전하겠습니다.',date:'2025.04.28'},
+    {author:'CoolPlayer',role:'new',  text:'오픈 축하드립니다! 좋은 플랫폼이 될 것 같아요.',date:'2025.04.28'},
+    {author:'Admin',     role:'admin',text:'감사합니다! 앞으로 더 좋은 서비스로 발전하겠습니다.',date:'2025.04.28'},
   ],
   2:[
-    {author:'GameFan',role:'active',text:'진짜 완성도 높네요. 플레이 해봤는데 재밌어요!',date:'2025.04.27'},
-    {author:'NewDev99',role:'new',text:'6개월 혼자 만드셨다고요? 대단하시네요.',date:'2025.04.27'},
-    {author:'ScriptPro',role:'pro',text:'코드 최적화 잘 되어 있나요? 렉은 없던데요.',date:'2025.04.27'},
+    {author:'GameFan',  role:'active',text:'완성도 높네요. 플레이해봤는데 재밌어요!',date:'2025.04.27'},
+    {author:'NewDev99', role:'new',   text:'6개월 혼자 만드셨다고요? 대단하시네요.',date:'2025.04.27'},
+    {author:'ScriptPro',role:'pro',   text:'렉은 없던데 최적화도 잘 되어있네요.',date:'2025.04.27'},
   ],
 };
+const state = { section:'notice', sort:'latest', loggedIn:false, user:null, imgFiles:[] };
+</script>
 
-/* ============================================================
-   STATE
-   ============================================================ */
-const state = {
-  section: 'notice',
-  sort: 'latest',
-  lang: 'ko',
-  loggedIn: false,
-  user: null,
-  imgFiles: [],
-};
-
-/* ============================================================
-   UTILS
-   ============================================================ */
+<!-- ============================================================
+     utils.js — 공용 헬퍼 · 렌더 유틸
+     ============================================================ -->
+<script>
 const $ = id => document.getElementById(id);
 const $$ = sel => document.querySelectorAll(sel);
-
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function avColor(name) {
-  let h = 0;
-  for (let c of name) h = (h * 31 + c.charCodeAt(0)) % 8;
-  return 'av-' + h;
-}
-
-function badge(role) {
-  const b = BADGE_MAP[role];
-  return b ? `<span class="badge ${b.cls}">${b.label}</span>` : '';
-}
-
-function openModal(id)  { $(id).classList.add('open'); }
-function closeModal(id) { $(id).classList.remove('open'); }
-
-function todayStr() {
-  const d = new Date();
-  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
-}
-
-/* ============================================================
-   RENDER FEED
-   ============================================================ */
-function renderFeed() {
-  const sec = state.section;
-  const info = SECTIONS[sec] || {label:sec, desc:''};
-  $('feedTitle').innerHTML = `<span class="feed-hash">#</span> ${info.label}`;
-  $('feedDesc').textContent = info.desc;
-
-  // Pinned
-  const pinned = POSTS.filter(p => p.section === sec && p.pinned);
-  $('pinnedPosts').innerHTML = pinned.map(p => `
-    <div class="post-card pinned-card" data-id="${p.id}">
-      <div class="pin-label">
-        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/></svg>
-        고정된 게시물
-      </div>
-      ${cardInner(p)}
-    </div>`).join('');
-
-  // Normal posts
-  let posts = POSTS.filter(p => p.section === sec && !p.pinned);
-  if (state.sort === 'popular') posts = [...posts].sort((a,b) => b.likes - a.likes);
-  else posts = [...posts].sort((a,b) => b.id - a.id);
-
-  $('postsList').innerHTML = posts.length
-    ? posts.map(p => `<div class="post-card" data-id="${p.id}">${cardInner(p)}</div>`).join('')
-    : `<div style="text-align:center;padding:48px 0;color:var(--text3);font-size:13px;">아직 게시물이 없어요. 첫 번째 글을 작성해보세요!</div>`;
-
-  // Click handlers
-  $$('.post-card[data-id]').forEach(el => {
-    el.addEventListener('click', () => openPost(+el.dataset.id));
-  });
-}
-
-function cardInner(p) {
-  const av = avColor(p.author.name);
-  const init = p.author.name.charAt(0).toUpperCase();
-  const body = p.gameThumb
-    ? `<div class="post-with-thumb">
-        <img class="post-game-thumb" src="${esc(p.gameThumb)}" alt="" onerror="this.style.display='none'">
-        <div class="post-thumb-info">
-          <h3 class="post-title">${esc(p.title)}</h3>
-          <p class="post-preview">${esc(p.content.slice(0,120))}...</p>
-        </div>
-       </div>`
-    : `<h3 class="post-title">${esc(p.title)}</h3>
-       <p class="post-preview">${esc(p.content.slice(0,160))}...</p>`;
-
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function avColor(name){ let h=0; for(const c of String(name)) h=(h*31+c.charCodeAt(0))%8; return 'av-'+h; }
+function makeBadge(role){ const b=BADGE_MAP[role]; return b?`<span class="badge ${b.cls}">${b.label}</span>`:''; }
+function makeAvatar(name,size=26,fs=11){ return `<div class="avatar ${avColor(name)}" style="width:${size}px;height:${size}px;font-size:${fs}px;">${String(name).charAt(0).toUpperCase()}</div>`; }
+function todayStr(){ const d=new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`; }
+function openModal(id){ $(id).classList.add('open'); }
+function closeModal(id){ $(id).classList.remove('open'); }
+function cardInner(p){
+  const av=makeAvatar(p.author.name,26,11);
+  const body=p.gameThumb
+    ?`<div class="post-with-thumb"><img class="post-game-thumb" src="${esc(p.gameThumb)}" alt="" onerror="this.style.display='none'"><div class="post-thumb-info"><h3 class="post-title">${esc(p.title)}</h3><p class="post-preview">${esc(p.content.slice(0,120))}...</p></div></div>`
+    :`<h3 class="post-title">${esc(p.title)}</h3><p class="post-preview">${esc(p.content.slice(0,160))}...</p>`;
   return `<div class="post-card-inner">
     <div class="post-meta-top">
-      <div class="post-author">
-        <div class="avatar ${av}">${init}</div>
-        <span class="author-name">${esc(p.author.name)}</span>
-        ${badge(p.author.role)}
-      </div>
+      <div class="post-author">${av}<span class="author-name">${esc(p.author.name)}</span>${makeBadge(p.author.role)}</div>
       <span class="post-date">${p.date}</span>
     </div>
     ${body}
     <div class="post-footer">
-      <span class="post-stat">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2.748-.717.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 3.485L8 2.748z" stroke="currentColor" stroke-width="1.2"/></svg>
-        ${p.likes}
-      </span>
-      <span class="post-stat">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z" stroke="currentColor" stroke-width="1.2"/></svg>
-        ${p.comments}
-      </span>
-      <span class="section-tag"># ${SECTIONS[p.section]?.label || p.section}</span>
+      <span class="post-stat"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2.748-.717.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 3.485L8 2.748z" stroke="currentColor" stroke-width="1.2"/></svg>${p.likes}</span>
+      <span class="post-stat"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z" stroke="currentColor" stroke-width="1.2"/></svg>${p.comments}</span>
+      <span class="section-tag"># ${SECTIONS[p.section]?.label||p.section}</span>
     </div>
   </div>`;
 }
+function insertMd(before,after){
+  const ta=$('editorTextarea');
+  const s=ta.selectionStart,e=ta.selectionEnd;
+  const sel=ta.value.substring(s,e)||'text';
+  ta.value=ta.value.substring(0,s)+before+sel+after+ta.value.substring(e);
+  ta.focus(); ta.selectionStart=s+before.length; ta.selectionEnd=s+before.length+sel.length;
+}
+</script>
 
-/* ============================================================
-   POST DETAIL MODAL
-   ============================================================ */
-function openPost(id) {
-  const p = POSTS.find(x => x.id === id);
-  if (!p) return;
-  const av = avColor(p.author.name);
-  const init = p.author.name.charAt(0).toUpperCase();
-  const coms = COMMENTS[id] || [];
+<!-- ============================================================
+     auth.js — 로그인 / 회원가입 (닉네임+비밀번호, 이메일 인증 없음)
+     ============================================================ -->
+<script>
+function updateAuthUI(){
+  const btn=$('loginBtn');
+  if(state.loggedIn&&state.user){
+    btn.innerHTML=makeAvatar(state.user.name,20,10)+`<span style="margin-left:5px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(state.user.name)}</span>`;
+  } else { btn.textContent='로그인'; }
+}
+$('loginBtn').addEventListener('click',()=>{
+  if(state.loggedIn){ state.loggedIn=false; state.user=null; localStorage.removeItem('rbboard_user'); updateAuthUI(); }
+  else openModal('loginModal');
+});
+$('closeLoginModal').addEventListener('click',()=>closeModal('loginModal'));
+$('loginModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('loginModal'); });
+$$('.modal-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    $$('.modal-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    $('formLogin').classList.toggle('hidden', tab.dataset.tab!=='login');
+    $('formRegister').classList.toggle('hidden', tab.dataset.tab!=='register');
+  });
+});
+$('doLogin').addEventListener('click',()=>{
+  const nick=$('loginNick').value.trim();
+  const pw=$('loginPw').value.trim();
+  if(!nick){ alert('닉네임을 입력해주세요.'); return; }
+  if(!pw){ alert('비밀번호를 입력해주세요.'); return; }
+  state.loggedIn=true; state.user={name:nick,role:'new'};
+  localStorage.setItem('rbboard_user',JSON.stringify(state.user));
+  $('loginNick').value=''; $('loginPw').value='';
+  closeModal('loginModal'); updateAuthUI();
+});
+$('loginPw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('doLogin').click(); });
+$('doRegister').addEventListener('click',()=>{
+  const nick=$('regNick').value.trim();
+  const pw=$('regPw').value.trim();
+  if(!nick){ alert('닉네임을 입력해주세요.'); return; }
+  if(pw.length<8){ alert('비밀번호는 8자 이상 입력해주세요.'); return; }
+  state.loggedIn=true; state.user={name:nick,role:'new',roblox:$('regRoblox').value.trim()||null};
+  localStorage.setItem('rbboard_user',JSON.stringify(state.user));
+  $('regNick').value=''; $('regPw').value=''; $('regRoblox').value='';
+  closeModal('loginModal'); updateAuthUI();
+});
+$('regPw').addEventListener('keydown',e=>{ if(e.key==='Enter') $('doRegister').click(); });
+// 세션 복원
+(function(){ try{ const s=localStorage.getItem('rbboard_user'); if(s){ const u=JSON.parse(s); if(u?.name){ state.loggedIn=true; state.user=u; } } }catch{} })();
+</script>
 
-  const thumbHtml = p.gameThumb ? `
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--light);border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:14px;">
-      <img src="${esc(p.gameThumb)}" style="width:52px;height:52px;border-radius:6px;object-fit:cover;" onerror="this.style.display='none'">
-      <div>
-        <div style="font-size:13px;font-weight:700;">${esc(p.gameName||'')}</div>
-        <div style="font-size:11px;color:var(--text3);font-family:'Source Code Pro',monospace;">ID: ${esc(p.gameId)}</div>
-      </div>
-    </div>` : '';
-
-  const comsHtml = coms.map(c => {
-    const ca = avColor(c.author);
-    const ci = c.author.charAt(0).toUpperCase();
-    return `<div class="comment-item">
-      <div class="avatar ${ca}" style="width:28px;height:28px;font-size:11px;flex-shrink:0;">${ci}</div>
-      <div class="comment-body">
-        <div class="comment-author">${esc(c.author)} ${badge(c.role)} <span class="comment-date">${c.date}</span></div>
-        <div class="comment-text">${esc(c.text)}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  $('postModalContent').innerHTML = `
-    <div style="margin-bottom:18px;">
+<!-- ============================================================
+     post.js — 피드 렌더 · 게시물 상세 · 글쓰기 · 댓글
+     ============================================================ -->
+<script>
+function renderFeed(){
+  const sec=state.section;
+  const info=SECTIONS[sec]||{label:sec,desc:''};
+  $('feedTitle').innerHTML=`<span class="feed-hash">#</span>${info.label}`;
+  $('feedDesc').textContent=info.desc;
+  const pinned=POSTS.filter(p=>p.section===sec&&p.pinned);
+  $('pinnedPosts').innerHTML=pinned.map(p=>`
+    <div class="post-card pinned-card" data-id="${p.id}">
+      <div class="pin-label">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"/></svg>
+        고정된 게시물
+      </div>${cardInner(p)}</div>`).join('');
+  let posts=POSTS.filter(p=>p.section===sec&&!p.pinned);
+  posts=state.sort==='popular'?[...posts].sort((a,b)=>b.likes-a.likes):[...posts].sort((a,b)=>b.id-a.id);
+  $('postsList').innerHTML=posts.length
+    ?posts.map(p=>`<div class="post-card" data-id="${p.id}">${cardInner(p)}</div>`).join('')
+    :`<div style="text-align:center;padding:48px 0;color:var(--text3);font-size:13px;">아직 게시물이 없어요. 첫 번째 글을 작성해보세요!</div>`;
+  $$('.post-card[data-id]').forEach(el=>el.addEventListener('click',()=>openPost(+el.dataset.id)));
+}
+function openPost(id){
+  const p=POSTS.find(x=>x.id===id); if(!p) return;
+  const coms=COMMENTS[id]||[];
+  const thumbHtml=p.gameThumb?`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:14px;"><img src="${esc(p.gameThumb)}" style="width:50px;height:50px;border-radius:6px;object-fit:cover;" onerror="this.style.display='none'"><div><div style="font-size:13px;font-weight:700;">${esc(p.gameName||'')}</div><div style="font-size:11px;color:var(--text3);font-family:'Source Code Pro',monospace;">ID: ${esc(p.gameId)}</div></div></div>`:'';
+  const comsHtml=coms.map(c=>`<div class="comment-item">${makeAvatar(c.author,28,11)}<div class="comment-body"><div class="comment-author">${esc(c.author)} ${makeBadge(c.role)} <span class="comment-date">${c.date}</span></div><div class="comment-text">${esc(c.text)}</div></div></div>`).join('');
+  $('postModalContent').innerHTML=`
+    <div style="margin-bottom:16px;">
       <h2 class="post-detail-title">${esc(p.title)}</h2>
-      <div class="post-detail-meta">
-        <div class="avatar ${av}" style="width:22px;height:22px;font-size:10px;">${init}</div>
-        <strong>${esc(p.author.name)}</strong>
-        ${badge(p.author.role)}
-        <span>${p.date}</span>
-        <span style="font-family:'Source Code Pro',monospace;font-size:11px;"># ${SECTIONS[p.section]?.label||p.section}</span>
-      </div>
+      <div class="post-detail-meta">${makeAvatar(p.author.name,22,10)}<strong>${esc(p.author.name)}</strong>${makeBadge(p.author.role)}<span>${p.date}</span><span style="font-family:'Source Code Pro',monospace;font-size:11px;"># ${SECTIONS[p.section]?.label||p.section}</span></div>
     </div>
     ${thumbHtml}
     <div class="post-detail-body">${esc(p.content)}</div>
     <div class="post-actions-row">
-      <button class="like-btn" id="likeBtn">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2.748-.717.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 3.485L8 2.748z" stroke="currentColor" stroke-width="1.3"/></svg>
-        좋아요 <span id="likeCount">${p.likes}</span>
-      </button>
+      <button class="like-btn" id="likeBtn"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2.748-.717.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 3.485L8 2.748z" stroke="currentColor" stroke-width="1.3"/></svg>좋아요 <span id="likeCount">${p.likes}</span></button>
       <button class="report-btn">신고</button>
     </div>
     <div>
-      <div class="comments-section-title">댓글 ${coms.length}개</div>
+      <div class="comments-title">댓글 ${coms.length}개</div>
       <div id="commentsBox">${comsHtml}</div>
       <div class="comment-input-row">
-        <input type="text" id="commentInput" placeholder="${state.loggedIn ? '댓글을 입력하세요...' : '로그인 후 댓글을 달 수 있습니다.'}" ${state.loggedIn ? '' : 'disabled'}/>
+        <input type="text" id="commentInput" placeholder="${state.loggedIn?'댓글을 입력하세요...':'로그인 후 댓글을 달 수 있습니다.'}" ${state.loggedIn?'':'disabled'}/>
         <button class="comment-submit" id="commentSubmit">등록</button>
       </div>
     </div>`;
-
   openModal('postModal');
-
-  $('likeBtn').addEventListener('click', () => {
-    p.likes++;
-    $('likeCount').textContent = p.likes;
-    $('likeBtn').classList.add('liked');
-    renderFeed();
-  });
-
-  $('commentSubmit').addEventListener('click', () => {
-    if (!state.loggedIn) { closeModal('postModal'); openModal('loginModal'); return; }
-    const inp = $('commentInput');
-    const txt = inp.value.trim();
-    if (!txt) return;
-    if (!COMMENTS[id]) COMMENTS[id] = [];
-    COMMENTS[id].push({ author:state.user.name, role:'new', text:txt, date:todayStr() });
-    p.comments++;
-    inp.value = '';
-    openPost(id);
-  });
+  $('likeBtn').addEventListener('click',()=>{ p.likes++; $('likeCount').textContent=p.likes; $('likeBtn').classList.add('liked'); renderFeed(); });
+  const submitCom=()=>{
+    if(!state.loggedIn){ closeModal('postModal'); openModal('loginModal'); return; }
+    const inp=$('commentInput'); const txt=inp.value.trim(); if(!txt) return;
+    if(!COMMENTS[id]) COMMENTS[id]=[];
+    COMMENTS[id].push({author:state.user.name,role:state.user.role||'new',text:txt,date:todayStr()});
+    p.comments++; inp.value=''; openPost(id);
+  };
+  $('commentSubmit').addEventListener('click',submitCom);
+  $('commentInput').addEventListener('keydown',e=>{ if(e.key==='Enter') submitCom(); });
 }
+$('closePostModal').addEventListener('click',()=>closeModal('postModal'));
+$('postModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('postModal'); });
 
-/* ============================================================
-   AUTH
-   ============================================================ */
-function updateAuthUI() {
-  const btn = $('loginBtn');
-  if (state.loggedIn) {
-    const av = avColor(state.user.name);
-    btn.innerHTML = `<div class="avatar ${av}" style="width:20px;height:20px;font-size:10px;margin-right:4px;">${state.user.name.charAt(0).toUpperCase()}</div>${esc(state.user.name)}`;
-  } else {
-    btn.textContent = '로그인';
-  }
+// 글쓰기
+$('writeBtn').addEventListener('click',()=>{ if(!state.loggedIn){ openModal('loginModal'); return; } openModal('writeModal'); });
+$('closeWriteModal').addEventListener('click',()=>closeModal('writeModal'));
+$('cancelWrite').addEventListener('click',()=>closeModal('writeModal'));
+$('writeModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal('writeModal'); });
+const previewURLs=[];
+$('imageInput').addEventListener('change',e=>{
+  const files=Array.from(e.target.files);
+  state.imgFiles=[...state.imgFiles,...files.slice(0,5-state.imgFiles.length)];
+  renderImgPreviews(); e.target.value='';
+});
+function renderImgPreviews(){
+  previewURLs.forEach(u=>URL.revokeObjectURL(u)); previewURLs.length=0;
+  $('imgCount').textContent=`${state.imgFiles.length}/5`;
+  $('imgPreviewRow').innerHTML=state.imgFiles.map((f,i)=>{ const u=URL.createObjectURL(f); previewURLs.push(u); return `<div class="img-preview-item"><img src="${u}" alt=""><button class="remove-img" data-i="${i}">x</button></div>`; }).join('');
+  $$('.remove-img').forEach(btn=>btn.addEventListener('click',()=>{ URL.revokeObjectURL(previewURLs[+btn.dataset.i]); state.imgFiles.splice(+btn.dataset.i,1); renderImgPreviews(); }));
 }
-
-$('loginBtn').addEventListener('click', () => {
-  if (state.loggedIn) { state.loggedIn = false; state.user = null; updateAuthUI(); }
-  else openModal('loginModal');
-});
-
-$('closeLoginModal').addEventListener('click', () => closeModal('loginModal'));
-$('loginModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('loginModal'); });
-
-$$('.modal-tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    $$('.modal-tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    $('formLogin').classList.toggle('hidden', tab.dataset.tab !== 'login');
-    $('formRegister').classList.toggle('hidden', tab.dataset.tab !== 'register');
-  });
-});
-
-$('doLogin').addEventListener('click', () => {
-  const email = $('loginEmail').value.trim();
-  if (!email) { alert('이메일을 입력해주세요.'); return; }
-  state.loggedIn = true;
-  state.user = { name: email.split('@')[0], role:'new' };
-  closeModal('loginModal');
-  updateAuthUI();
-});
-
-$('doRegister').addEventListener('click', () => {
-  const nick = $('regNick').value.trim();
-  const email = $('regEmail').value.trim();
-  if (!nick || !email) { alert('닉네임과 이메일을 입력해주세요.'); return; }
-  state.loggedIn = true;
-  state.user = { name: nick, role:'new' };
-  closeModal('loginModal');
-  updateAuthUI();
-});
-
-/* ============================================================
-   WRITE
-   ============================================================ */
-$('writeBtn').addEventListener('click', () => {
-  if (!state.loggedIn) { openModal('loginModal'); return; }
-  openModal('writeModal');
-});
-$('closeWriteModal').addEventListener('click', () => closeModal('writeModal'));
-$('cancelWrite').addEventListener('click', () => closeModal('writeModal'));
-$('writeModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('writeModal'); });
-
-$('imageInput').addEventListener('change', e => {
-  const files = Array.from(e.target.files);
-  const rem = 5 - state.imgFiles.length;
-  state.imgFiles = [...state.imgFiles, ...files.slice(0, rem)];
-  renderImgPreviews();
-  e.target.value = '';
-});
-
-function renderImgPreviews() {
-  $('imgCount').textContent = `${state.imgFiles.length}/5`;
-  $('imgPreviewRow').innerHTML = state.imgFiles.map((f, i) => {
-    const url = URL.createObjectURL(f);
-    return `<div class="img-preview-item">
-      <img src="${url}">
-      <button class="remove-img" data-i="${i}" style="cursor:pointer;">x</button>
-    </div>`;
-  }).join('');
-  $$('.remove-img').forEach(btn => btn.addEventListener('click', () => {
-    state.imgFiles.splice(+btn.dataset.i, 1);
-    renderImgPreviews();
-  }));
-}
-
-$('fetchGameBtn').addEventListener('click', () => {
-  const gid = $('gameIdInput').value.trim();
-  if (!gid) return;
+$('fetchGameBtn').addEventListener('click',fetchGame);
+$('gameIdInput').addEventListener('keydown',e=>{ if(e.key==='Enter') fetchGame(); });
+function fetchGame(){
+  const gid=$('gameIdInput').value.trim(); if(!gid) return;
   $('gamePreview').classList.remove('hidden');
-  $('gameThumb').innerHTML = `<img src="https://tr.rbxcdn.com/53eb9b17fe1432a809c73a13889b5006/768/432/Image/Png" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.style.background='#ddd'">`;
-  $('gameNamePreview').textContent = `Game ID: ${gid}`;
-  $('gameIdPreview').textContent = `ID: ${gid}`;
-});
-
-$('submitPost').addEventListener('click', () => {
-  const title = $('writeTitle').value.trim();
-  const content = $('editorTextarea').value.trim();
-  const section = $('writeSectionSelect').value;
-  if (!title) { alert('제목을 입력해주세요.'); return; }
-  if (!content) { alert('내용을 입력해주세요.'); return; }
-  const gameId = $('gameIdInput').value.trim();
-  POSTS.unshift({
-    id: Date.now(), section, title, content,
-    author: state.user,
-    likes:0, comments:0, date:todayStr(), pinned:false,
-    gameId: gameId || null,
-  });
-  state.imgFiles = [];
-  renderImgPreviews();
-  $('writeTitle').value = '';
-  $('editorTextarea').value = '';
-  $('gameIdInput').value = '';
-  $('gamePreview').classList.add('hidden');
-  closeModal('writeModal');
-  state.section = section;
-  $$('.section-item').forEach(i => i.classList.toggle('active', i.dataset.section === section));
-  renderFeed();
-});
-
-/* ============================================================
-   POST MODAL CLOSE
-   ============================================================ */
-$('closePostModal').addEventListener('click', () => closeModal('postModal'));
-$('postModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal('postModal'); });
-
-/* ============================================================
-   SIDEBAR
-   ============================================================ */
-$$('.section-item').forEach(item => {
-  item.addEventListener('click', () => {
-    $$('.section-item').forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
-    state.section = item.dataset.section;
-    renderFeed();
-    window.scrollTo({top:0, behavior:'smooth'});
-  });
-});
-
-/* ============================================================
-   NAVBAR
-   ============================================================ */
-$('sortBtn').addEventListener('click', () => {
-  state.sort = state.sort === 'latest' ? 'popular' : 'latest';
-  $('sortLabel').textContent = state.sort === 'latest' ? '최신순' : '인기순';
-  renderFeed();
-});
-
-$('langBtn').addEventListener('click', () => {
-  state.lang = state.lang === 'ko' ? 'en' : 'ko';
-  $('langBtn').textContent = state.lang.toUpperCase();
-});
-
-let searchTimer;
-$('searchInput').addEventListener('input', e => {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(() => {
-    const q = e.target.value.trim().toLowerCase();
-    if (!q) { renderFeed(); return; }
-    const res = POSTS.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.content.toLowerCase().includes(q) ||
-      p.author.name.toLowerCase().includes(q)
-    );
-    $('feedTitle').innerHTML = `<span class="feed-hash">#</span> 검색: ${esc(q)}`;
-    $('feedDesc').textContent = `${res.length}개의 결과`;
-    $('pinnedPosts').innerHTML = '';
-    $('postsList').innerHTML = res.length
-      ? res.map(p => `<div class="post-card" data-id="${p.id}">${cardInner(p)}</div>`).join('')
-      : `<div style="text-align:center;padding:48px 0;color:var(--text3);font-size:13px;">검색 결과가 없어요.</div>`;
-    $$('.post-card[data-id]').forEach(el => el.addEventListener('click', () => openPost(+el.dataset.id)));
-  }, 280);
-});
-
-$('loadMoreBtn').addEventListener('click', function() {
-  this.textContent = '불러오는 중...';
-  setTimeout(() => { this.textContent = '더 보기'; }, 1200);
-});
-
-/* ============================================================
-   EDITOR HELPER (global — called from onclick in HTML)
-   ============================================================ */
-function insertMd(before, after) {
-  const ta = $('editorTextarea');
-  const s = ta.selectionStart, e = ta.selectionEnd;
-  const sel = ta.value.substring(s, e) || 'text';
-  ta.value = ta.value.substring(0,s) + before + sel + after + ta.value.substring(e);
-  ta.focus();
-  ta.selectionStart = s + before.length;
-  ta.selectionEnd   = s + before.length + sel.length;
+  $('gameThumb').innerHTML=`<img src="https://tr.rbxcdn.com/53eb9b17fe1432a809c73a13889b5006/768/432/Image/Png" onerror="this.parentElement.style.background='#ddd'">`;
+  $('gameNamePreview').textContent=`게임 ID: ${gid}`;
+  $('gameIdPreview').textContent=`ID: ${gid}`;
 }
+$('submitPost').addEventListener('click',()=>{
+  const title=$('writeTitle').value.trim();
+  const content=$('editorTextarea').value.trim();
+  const section=$('writeSectionSelect').value;
+  if(!title){ alert('제목을 입력해주세요.'); return; }
+  if(!content){ alert('내용을 입력해주세요.'); return; }
+  POSTS.unshift({id:Date.now(),section,title,content,author:state.user,likes:0,comments:0,date:todayStr(),pinned:false,gameId:$('gameIdInput').value.trim()||null});
+  $('writeTitle').value=''; $('editorTextarea').value=''; $('gameIdInput').value='';
+  $('gamePreview').classList.add('hidden');
+  previewURLs.forEach(u=>URL.revokeObjectURL(u)); previewURLs.length=0; state.imgFiles=[]; renderImgPreviews();
+  closeModal('writeModal');
+  $('searchInput').value=''; state.section=section;
+  $$('.section-item').forEach(i=>i.classList.toggle('active',i.dataset.section===section));
+  renderFeed();
+});
+</script>
 
-/* ============================================================
-   INIT
-   ============================================================ */
+<!-- ============================================================
+     main.js — 사이드바 · 햄버거 · 검색 · 정렬 · 초기화
+     ============================================================ -->
+<script>
+function initSidebar(){
+  $$('.section-item').forEach(item=>{
+    item.addEventListener('click',()=>{
+      $$('.section-item').forEach(i=>i.classList.remove('active'));
+      item.classList.add('active');
+      state.section=item.dataset.section;
+      $('searchInput').value='';
+      renderFeed(); closeMobileSidebar();
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+}
+function openMobileSidebar(){ $('sidebar').classList.add('open'); $('sidebarOverlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeMobileSidebar(){ $('sidebar').classList.remove('open'); $('sidebarOverlay').classList.remove('open'); document.body.style.overflow=''; }
+$('hamburger').addEventListener('click',()=>{ $('sidebar').classList.contains('open')?closeMobileSidebar():openMobileSidebar(); });
+$('sidebarOverlay').addEventListener('click',closeMobileSidebar);
+$('sortBtn').addEventListener('click',()=>{
+  state.sort=state.sort==='latest'?'popular':'latest';
+  $('sortLabel').textContent=state.sort==='latest'?'최신순':'인기순';
+  renderFeed();
+});
+let searchTimer;
+$('searchInput').addEventListener('input',e=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>{
+    const q=e.target.value.trim().toLowerCase();
+    if(!q){ renderFeed(); return; }
+    const res=POSTS.filter(p=>p.title.toLowerCase().includes(q)||p.content.toLowerCase().includes(q)||p.author.name.toLowerCase().includes(q));
+    $('feedTitle').innerHTML=`<span class="feed-hash">#</span>검색: ${esc(q)}`;
+    $('feedDesc').textContent=`${res.length}개의 결과`;
+    $('pinnedPosts').innerHTML='';
+    $('postsList').innerHTML=res.length?res.map(p=>`<div class="post-card" data-id="${p.id}">${cardInner(p)}</div>`).join(''):`<div style="text-align:center;padding:48px 0;color:var(--text3);font-size:13px;">검색 결과가 없어요.</div>`;
+    $$('.post-card[data-id]').forEach(el=>el.addEventListener('click',()=>openPost(+el.dataset.id)));
+  },280);
+});
+$('loadMoreBtn').addEventListener('click',function(){ this.textContent='불러오는 중...'; setTimeout(()=>{ this.textContent='더 보기'; },1200); });
+window.addEventListener('resize',()=>{ if(window.innerWidth>768) closeMobileSidebar(); });
+// 모바일 키보드 스크롤 보정
+$('writeModal').querySelectorAll('input,textarea,select').forEach(inp=>{
+  inp.addEventListener('focus',()=>setTimeout(()=>inp.scrollIntoView({behavior:'smooth',block:'center'}),300));
+});
+// 초기화
+initSidebar();
+updateAuthUI();
 renderFeed();
 </script>
 </body>
